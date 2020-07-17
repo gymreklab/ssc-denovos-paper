@@ -26,7 +26,10 @@ COL_PAT_GT = 18
 # Read in filtered mutations
 filtmut = pd.read_csv(FILTMUTFILE, sep="\t")
 filtmut["chrom"] = filtmut["chrom"].apply(GetChrom)
-#filtmut = filtmut[filtmut["family"]==11006] # TODO remove when allmuts has all families
+
+# Filter problematic families
+rmfams = [14151, 12434, 12281, 13673, 13351, 13355, 13143]
+filtmut = filtmut[~filtmut["family"].isin(rmfams)]
 
 # Write header
 sys.stdout.write("\t".join(["chrom","pos", \
