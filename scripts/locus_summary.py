@@ -30,6 +30,7 @@ filtmut["chrom"] = filtmut["chrom"].apply(GetChrom)
 # Filter problematic families
 rmfams = [14151, 12434, 12281, 13673, 13351, 13355, 13143]
 filtmut = filtmut[~filtmut["family"].isin(rmfams)]
+usefams = set(filtmut["family"])
 
 # Write header
 sys.stdout.write("\t".join(["chrom","pos", \
@@ -51,7 +52,15 @@ def TestTDT(tdt_unaff, tdt_aff):
 def ComputeLocusStats(proc_lines, filtmut):
     if len(proc_lines) == 0: return
 
-    # Figure out chrom and pos
+    # Figure out chrom and pos. First check them
+    chroms = set([GetChrom(l.split()[0]) for l in proc_lines])
+    poss = set([l.split()[1] for l in proc_lines])
+    if len(chroms) > 1:
+        sys.stderr.write("Error. found more than one chrom in proc_lines %s"%chroms)
+        sys.exit(1)
+    if len(poss) > 1:
+        sys.stderr.write("Error. found more than one pos in proc_lines %s"%chroms)
+        sys.exit(1)
     chrom = GetChrom(proc_lines[0].split()[0])
     pos = int(proc_lines[0].split()[1])
 
@@ -145,6 +154,7 @@ current_pos = -1
 with gzip.open(ALLMUTFILE, "rt") as f:
     for line in f:
         if line.startswith("chrom"): continue # header
+        if int(line.split()[4]) not in usefams: continue # filtered fam
         pos = int(line.split()[1])
         if pos == current_pos:
             proc_lines.append(line)
