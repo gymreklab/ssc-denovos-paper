@@ -1,0 +1,5 @@
+*.pdf
+*/.ipynb_checkpoints/*
+pdfs/
+simulations/
+tutorial/
