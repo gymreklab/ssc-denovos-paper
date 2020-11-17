@@ -1,5 +1,10 @@
+# The functions in this file are used to generate the following from Mitra, et al.:
+# Extended Data Figure 9: SISTR - A method to estimate selection coefficients for STRs
+# Extended Data Figure 10a: Comparison of true versus inferred selection coefficients
+# Extended Data Figure 10b: Power to detect negative selection as a function of s
+
 # This file contains helper functions for performing ABC (approximate Bayesian computation) in SISTR
-# to obtain a posterior distribution of s (selection coefficient) for each locus
+# to obtain a posterior distribution of s (selection coefficient) for each locus.
 
 ########## Imports ##########
 

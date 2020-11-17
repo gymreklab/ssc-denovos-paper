@@ -1,3 +1,6 @@
+# The functions in this file are used to generate the following from Mitra, et al.:
+# Extended Data Figure 9: SISTR - A method to estimate selection coefficients for STRs
+
 # This file contains helper functions for the SISTR mutation model, selection model, 
 # and simulation algorithm to simulate allele frequencies forward in time.
 
