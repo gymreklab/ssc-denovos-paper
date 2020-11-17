@@ -1,5 +1,5 @@
-# Helper functions for SISTR mutation model, selection model, 
-# and simulation algorithm to simulate allele frequencies forward in time
+# This file contains helper functions for the SISTR mutation model, selection model, 
+# and simulation algorithm to simulate allele frequencies forward in time.
 
 ########## Imports ##########
 
@@ -10,11 +10,28 @@ from ABC_functions import *
 
 ########## Simulation Helper Functions ##########
 
-# Function to get step size probability
+"""Get step size probability
+
+Parameters
+----------
+a1 : int
+    Allele mutating from
+a2: int
+    Allele mutating to
+beta: float 
+    Strength of mutation size directional bias
+p: float
+    Parameterizes the mutation geometric step size distribution
+    
+Returns
+-------
+step_size_prob: float
+    Given that a1 mutates, the porbability that a1 mutates to a2
+"""
 def GetStepSizeProb(a1, a2, beta, p):
     step_size = (a2-a1)
-    up_prob = max([0.01,0.5*(1-beta*p*a1)]) # Minimum value is 0.01
-    up_prob = min(up_prob, 0.99) # Maximum value is 0.99
+    up_prob = max([0.01,0.5*(1-beta*p*a1)]) # Minimum value is 0.01 (allow for minimal probability of expansion at large alleles)
+    up_prob = min(up_prob, 0.99) # Maximum value is 0.99 (allow for minimal probability of contraction at small alleles)
     down_prob = 1-up_prob
     if step_size>0: dir_prob = up_prob
     else: dir_prob = down_prob
@@ -28,9 +45,13 @@ Parameters
 num_alleles : int
     Size of transition matrix to build. Centered at "0" (most optimal allele in the center)
 mu: float
+    Per-generation mutation rate of the central allele
 beta: float 
+    Strength of mutation size directional bias
 p: float
+    Parameterizes the mutation geometric step size distribution
 L: float
+    Length-dependent mutation rate parameter (slope of the increase of mutation rate with allele size)
     
 Returns
 -------
@@ -46,7 +67,7 @@ def GetTransitionMatrix(num_alleles, mu, beta, p, L):
         for j in range(num_alleles):
             a1 = -1*int(num_alleles/2)+i
             a2 = -1*int(num_alleles/2)+j
-            log_mu_prime = np.log10(mu)+L*a1 # Length-dependent mutation rate. TODO should we do a sigmoid curve like Payseur?
+            log_mu_prime = np.log10(mu)+L*a1 # Length-dependent mutation rate
             mu_prime = 10**log_mu_prime
             if mu_prime < 10**-8: mu_prime = 10**-8 
             if mu_prime > 10**-3: mu_prime = 10**-3
@@ -55,7 +76,7 @@ def GetTransitionMatrix(num_alleles, mu, beta, p, L):
                 prob = GetStepSizeProb(a1, a2, beta, p)
                 transition_matrix[i,j] = mu_prime*prob
         
-    # Rescale each row to sum to 1 (which should hopefully be mostly true anyway)
+    # Rescale each row to sum to 1 
     for i in range(num_alleles):
         rowsum = np.sum(transition_matrix[i,:])
         transition_matrix[i,:] = transition_matrix[i,:]/rowsum

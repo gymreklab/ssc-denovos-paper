@@ -1,4 +1,4 @@
-# This file contain helper functions for SISTR per-locus validation
+# This file contains helper functions for SISTR per-locus validation.
 
 ########## Imports ##########
 
@@ -7,7 +7,58 @@ from scipy import stats
 
 ########## Per-locus Validation Functions ##########
 
-# Function to validate the per-locus method
+"""Validate the per-locus method
+
+Parameters
+----------
+per : int
+    Period to validate
+opt_allele: string
+    Optimal alleles to validate (separated by commas)
+s_vals: string
+    S values to validate (separated by commas)
+use_het: string
+    Whether to use heterozygosity as a summary statistic
+use_common : string
+    Whether to use number of common alleles as a summary statistic
+use_bins: string
+    Whether to use bins of allele frequencies as a summary statistic
+num_bins: int
+    Number of bins to use when binning allele frequencies
+abc_model: string
+    Prior/demographic model to use for ABC
+lrt_model : string
+    Demographic model to use for LRT
+ground_truth_model: string
+    The ground truth model for simulations
+all_pers: boolean 
+    Whether to validate all periods (2,3,4) or just one
+first_200: boolean
+    Whether to infer s for first 200 allele frequencies in file
+trials_2000: boolean
+    Whether to infer s for 2000 allele frequencies (default: infer s for 200 allele frequencies)
+LRT_200: boolean
+    Whether to perform 200 simulations for the LRT (default: perform 2000 simulations for the LRT)
+    
+Returns
+-------
+opt_allele_list: list
+    List of optimal alleles validated 
+s_vals_dic: dictionary
+    Contains information about inferred s values 
+errors_s_dic: dictionary
+    Contains information about error for inferred s values
+s_vals: list
+    List of s values validated
+p_vals_dic: dictionary
+    Contains information about p values obtained from LRT
+errors_p_dic: dictionary
+    Contains information about error for p values
+eps_bins: float
+    Error threshold for bins summary statistic
+LogLR_vals_dic: dictionary
+    Contains information about LogLR values
+"""
 def validate_per_locus(per, opt_allele, s_vals, use_het, use_common, use_bins, \
                        num_bins, abc_model, lrt_model, ground_truth_model, all_pers=False, \
                        first_200=True, trials_2000=False, LRT_200=False):

@@ -1,4 +1,4 @@
-# This file contains helper functions for performing ABC (approximate Bayesain computation) in SISTR
+# This file contains helper functions for performing ABC (approximate Bayesian computation) in SISTR
 # to obtain a posterior distribution of s (selection coefficient) for each locus
 
 ########## Imports ##########
@@ -31,7 +31,7 @@ def GetBins(allele_freqs, num_bins):
     return bins
 
 ### Get summary statistics ###
-# Return heterozygosity, number of common alleles, obs_bins (if num_bins > 0)
+# Return heterozygosity, number of common alleles, bins of allele frequencies (if num_bins > 0)
 def GetSummStats(freq_string, num_bins):
     allele_freqs = [float(freq) for freq in freq_string.split(',')]
     obs_het = 1-sum([item**2 for item in allele_freqs])
@@ -42,7 +42,7 @@ def GetSummStats(freq_string, num_bins):
         obs_bins = GetBins(allele_freqs, num_bins)
         return obs_het, obs_common, obs_bins
 
-### Process freqs ###
+### Process allele frequencies ###
 # Return optimal allele repeat units, allele frequencies
 def Process_Freqs(freqs, per, end, start, return_freqs=True):
     # Process freqs
@@ -167,7 +167,7 @@ def Get_S_ABC(abc_list, obs_het, obs_common, obs_bins, constant_het,
     EPSILON_bins = eps_bins
   
     # List of summary statistics to use 
-    # (indicated by 0, 1, and 2 for het, num common alleles, allele frequency bins respectively)
+    # (indicated by 0, 1, and 2 for heterozygosity, number of common alleles, allele frequency bins respectively)
     stats_to_check = []
     
     if use_het == 'y':
@@ -198,7 +198,7 @@ def Get_S_ABC(abc_list, obs_het, obs_common, obs_bins, constant_het,
          
     num_accepted = len(s_accepted)
     
-    # Debugging setting - returning list of heterozygosity
+    # Debugging setting - return list of heterozygosity
     if debug == True:
         het_list = []
         for combo in abc_list:
