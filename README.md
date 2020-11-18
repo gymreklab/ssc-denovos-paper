@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/240371051.svg)](https://zenodo.org/badge/latestdoi/240371051)
+
 # ssc-denovos-paper
 Scripts and notebooks for generating results in Mitra et al. 2020
 
